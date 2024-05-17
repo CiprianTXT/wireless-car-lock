@@ -6,9 +6,14 @@
     <string name="select_bt_device_title">Connect</string>
     <string name="select_bt_device_desc">Select a paired Bluetooth device to connect to and then tap on the floating button to synchronize the settings</string>
     <string name="bt_list_error">Your device doesn\'t support Bluetooth</string>
+    <string name="bt_permission_denied_title">Feature unavailable</string>
+    <string name="bt_permission_denied_desc">Bluetooth features are unavailable because this app needs permissions that were not given</string>
+    <string name="bt_permission_denied_settings">I changed my mind</string>
+    <string name="bt_permission_denied_ack">OK</string>
     <string name="bt_rationale_title">Bluetooth permission</string>
     <string name="bt_rationale_desc">Bluetooth permission is needed for connecting your phone to the device</string>
-    <string name="bt_rationale_negative_btn">Cancel</string>
+    <string name="bt_rationale_cancel">Cancel</string>
+    <string name="bt_rationale_ack">OK</string>
     <string name="bt_list_title">Paired Bluetooth devices</string>
     <string name="bt_list_refresh">Refresh the list of paired devices</string>
     <string name="sync_btn_desc">Synchronize settings from device</string>
