@@ -18,7 +18,7 @@ Ei bine, pe lângă sistemul de keyless entry, îți vei putea seta din aplicaț
 
 ### Schemă bloc
 
-<img src="https://ocw.cs.pub.ro/courses/_media/pm/prj2024/rvirtan/wireless-lock/schema_bloc.png?cache=" class="align-center" width="700" />
+<img src="https://ocw.cs.pub.ro/courses/_media/pm/prj2024/rvirtan/wireless-lock/schema_bloc.png" class="align-center" width="700" />
 
 ### Mod de funcționare
 
