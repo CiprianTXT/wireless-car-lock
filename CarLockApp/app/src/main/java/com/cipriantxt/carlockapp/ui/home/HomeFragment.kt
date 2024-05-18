@@ -2,13 +2,16 @@ package com.cipriantxt.carlockapp.ui.home
 
 import android.Manifest.permission.BLUETOOTH_SCAN
 import android.Manifest.permission.BLUETOOTH_CONNECT
+import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
-import androidx.core.app.ActivityCompat
+import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -21,22 +24,24 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private var permissions = hashMapOf(
-        BLUETOOTH_SCAN to false,
-        BLUETOOTH_CONNECT to false
-    )
-    private var currentPermission: String? = null
-    private val requestPermissionLauncher = registerForActivityResult(RequestPermission()) { isGranted ->
-        if (isGranted) {
-            permissions[currentPermission!!] = true
-        } else {
+    private val permissions = arrayOf(BLUETOOTH_SCAN, BLUETOOTH_CONNECT)
+    private var btPermissionsGranted = false
+    private val requestPermissionsLauncher = registerForActivityResult(RequestMultiplePermissions()) { isGranted ->
+        if (isGranted.values.all { granted -> granted }) {
+            btPermissionsGranted = true
+        } else if (!permissions.any { permission -> shouldShowRequestPermissionRationale(requireActivity(), permission) }) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.bt_permission_denied_title)
                 .setMessage(R.string.bt_permission_denied_desc)
-                .setNegativeButton(R.string.bt_permission_denied_settings) { dialog, which ->
+                .setNeutralButton(R.string.bt_permission_denied_settings) { _, _ ->
+                    val intent = Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + requireContext().packageName)
+                    )
+                    startActivity(intent)
                 }
-                .setPositiveButton(R.string.bt_permission_denied_ack) { action, _ ->
-                    action.dismiss()
+                .setPositiveButton(R.string.bt_permission_denied_ack) { dialog, _ ->
+                    dialog.dismiss()
                 }
                 .show()
         }
@@ -52,8 +57,8 @@ class HomeFragment : Fragment() {
 
         val selectBtDeviceBtn: MaterialCardView = binding.selectBtDeviceBtn
         selectBtDeviceBtn.setOnClickListener { view ->
-            requestPermissions()
-            if (permissions.values.all { granted -> granted }) {
+            requestBtPermissions()
+            if (btPermissionsGranted) {
                 view.findNavController().navigate(R.id.action_navigation_home_to_navigation_bt_device_list)
             }
         }
@@ -61,44 +66,30 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    private fun requestPermissions() {
-//        val notGrantedPermissions = permissions.filter { permission ->
-//            ContextCompat.checkSelfPermission(requireContext(), permission) != PERMISSION_DENIED
-//        }
-//        val showRationale = notGrantedPermissions.any { permission ->
-//            shouldShowRequestPermissionRationale(permission)
-//        }
-//        if (notGrantedPermissions.isNotEmpty()) {
-//            if (showRationale) {
-//                MaterialAlertDialogBuilder(requireContext())
-//                    .setTitle(R.string.bt_rationale_title)
-//                    .setMessage(R.string.bt_rationale_desc)
-//                    .setNegativeButton(R.string.bt_rationale_negative_btn) { dialog, _ ->
-//
-//                    }
-//            }
-//        }
-        permissions.forEach { (permission, _) ->
-            when {
-                ContextCompat.checkSelfPermission(requireContext(), permission) == PERMISSION_GRANTED -> {
-                    permissions[permission] = true
-                }
+    private fun requestBtPermissions() {
+        val hasBtPermissions = permissions.all { permission ->
+            ContextCompat.checkSelfPermission(requireContext(), permission) == PERMISSION_GRANTED
+        }
+        when {
+            hasBtPermissions -> {
+                btPermissionsGranted = true
+            }
 
-                ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission) -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.bt_rationale_title)
-                        .setMessage(R.string.bt_rationale_desc)
-                        .setNegativeButton(R.string.bt_rationale_cancel) { dialog, _ ->
-                        }
-                        .setPositiveButton(R.string.bt_rationale_ack) { dialog, _ ->
-                        }
-                        .show()
-                }
+            permissions.any { permission -> shouldShowRequestPermissionRationale(requireActivity(), permission) } -> {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.bt_rationale_title)
+                    .setMessage(R.string.bt_rationale_desc)
+                    .setNegativeButton(R.string.bt_rationale_cancel) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .setPositiveButton(R.string.bt_rationale_ack) { _, _ ->
+                        requestPermissionsLauncher.launch(permissions)
+                    }
+                    .show()
+            }
 
-                else -> {
-                    currentPermission = permission
-                    requestPermissionLauncher.launch(permission)
-                }
+            else -> {
+                requestPermissionsLauncher.launch(permissions)
             }
         }
     }
