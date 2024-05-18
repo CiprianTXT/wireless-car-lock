@@ -10,8 +10,8 @@
     <string name="bt_permission_denied_desc">Bluetooth features are unavailable because this app needs permissions that were not given</string>
     <string name="bt_permission_denied_settings">I changed my mind</string>
     <string name="bt_permission_denied_ack">OK</string>
-    <string name="bt_rationale_title">Bluetooth permission</string>
-    <string name="bt_rationale_desc">Bluetooth permission is needed for connecting your phone to the device</string>
+    <string name="bt_rationale_title">Bluetooth permissions</string>
+    <string name="bt_rationale_desc">Bluetooth permissions are needed for connecting your phone to the device</string>
     <string name="bt_rationale_cancel">Cancel</string>
     <string name="bt_rationale_ack">OK</string>
     <string name="bt_list_title">Paired Bluetooth devices</string>
