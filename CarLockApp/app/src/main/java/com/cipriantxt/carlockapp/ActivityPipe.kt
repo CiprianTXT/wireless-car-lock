@@ -1,7 +1,8 @@
-package com.cipriantxt.carlockapp.ui.home
+package com.cipriantxt.carlockapp
 
 import android.bluetooth.BluetoothDevice
 
 interface ActivityPipe {
-    fun exchange(device: BluetoothDevice)
+    fun connectTo(device: BluetoothDevice)
+    fun getBtConnection(): ConnectionThread?
 }
