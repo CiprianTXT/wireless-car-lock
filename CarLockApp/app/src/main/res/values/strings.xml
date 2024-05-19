@@ -19,8 +19,9 @@
     <string name="bt_rationale_ack">OK</string>
     <string name="bt_list_title">Paired Bluetooth devices</string>
     <string name="bt_list_refresh">Refresh the list of paired devices</string>
+    <string name="bt_connected_to_remote">Successfully connected to\ </string>
     <string name="bt_no_remote_connection">Connection to module not established</string>
-    <string name="bt_connection_error">Can\'t connect to selected device</string>
+    <string name="bt_connection_error">Can\'t connect to\ </string>
     <string name="bt_socket_error">Connection closed by remote</string>
     <string name="bt_command_error">Unexpected error occurred. Please try again</string>
     <string name="sync_btn_desc">Synchronize settings from device</string>
