@@ -96,9 +96,11 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
     private fun commandParser(job: Pair<Fragment, String>) {
         val fragment = job.first
         val command = job.second
-        when (command) {
-            "sync" -> syncCommand(fragment)
-            "lock" -> lockCommand(fragment)
+        when {
+            command == "sync" -> syncCommand(fragment)
+            command == "lock" -> lockCommand(fragment)
+            command.startsWith("setInfo") -> setInfoCommand(command)
+            command.startsWith("hideInfo") -> hideInfoCommand(command)
         }
     }
 
@@ -109,9 +111,7 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
         if (status == "success") {
             updateHomeLockBtnUi(fragment, lockState)
         } else {
-            activity.runOnUiThread {
-                Toast.makeText(activity, R.string.bt_command_error, Toast.LENGTH_SHORT).show()
-            }
+            printUnexpectedError()
         }
     }
 
@@ -125,9 +125,25 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
             }
             updateHomeLockBtnUi(fragment, lockState)
         } else {
+            printUnexpectedError()
+        }
+    }
+
+    private fun setInfoCommand(command: String) {
+        val status = issueCommandToSocket(command).trim()
+        if (status == "fail") {
+            printUnexpectedError()
+        }
+    }
+
+    private fun hideInfoCommand(command: String) {
+        val status = issueCommandToSocket(command).trim()
+        if (status == "success") {
             activity.runOnUiThread {
-                Toast.makeText(activity, R.string.bt_command_error, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, R.string.contact_saved, Toast.LENGTH_SHORT).show()
             }
+        } else {
+            printUnexpectedError()
         }
     }
 
@@ -185,6 +201,10 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
             fragment.requireView().findViewById<TextView>(R.id.lock_btn_title).setText(lockBtnTitle)
             fragment.requireView().findViewById<TextView>(R.id.lock_btn_desc).setText(lockBtnDesc)
         }
+    }
+
+    private fun printUnexpectedError() = activity.runOnUiThread {
+        Toast.makeText(activity, R.string.bt_command_error, Toast.LENGTH_SHORT).show()
     }
 
     fun enqueueJob(fragment: Fragment, command: String) = synchronized(lock) {
