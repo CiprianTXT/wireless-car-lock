@@ -90,9 +90,10 @@ void commandParser() {
     String command = BTSerial.readString();
     command.trim();
 
-    // Sync settings with phone app
+    // Sync lock state with phone app
     if (command.equals("sync")) {
-        // TODO
+        BTSerial.println(locked ? "Locked" : "Unlocked");
+        commandSuccessful = true;
     }
 
     // Lock/Unlock car doors
