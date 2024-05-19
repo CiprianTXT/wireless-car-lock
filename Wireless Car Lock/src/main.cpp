@@ -104,8 +104,9 @@ void commandParser() {
     }
 
     // Hide/Show contact info
-    if (command.equals("hideInfo")) {
-        hideContact = !hideContact;
+    if (command.startsWith("hideInfo")) {
+        short int colonPos = command.indexOf(':');
+        hideContact = command.substring(colonPos + 1).equals("0") ? false : true;
         if (hideContact) {
             Display.noBacklight();
             Display.clear();
