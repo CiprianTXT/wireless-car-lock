@@ -10,14 +10,17 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.cipriantxt.carlockapp.ActivityPipe
 import com.cipriantxt.carlockapp.R
 import com.cipriantxt.carlockapp.databinding.FragmentHomeBinding
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class HomeFragment : Fragment() {
@@ -47,6 +50,11 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private var activityPipe: ActivityPipe? = null
+    private var lockBtnIcon = R.drawable.ic_question_mark_24dp
+    private var lockBtnTitle = R.string.unknown_lock_state_title
+    private var lockBtnDesc = R.string.unknown_lock_state_desc
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,11 +63,36 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val selectBtDeviceBtn: MaterialCardView = binding.selectBtDeviceBtn
+        activityPipe = requireActivity() as ActivityPipe
+        root.findViewById<ImageView>(R.id.lock_btn_icon).setImageResource(lockBtnIcon)
+        root.findViewById<TextView>(R.id.lock_btn_title).setText(lockBtnTitle)
+        root.findViewById<TextView>(R.id.lock_btn_desc).setText(lockBtnDesc)
+
+        val selectBtDeviceBtn = binding.selectBtDeviceBtn
         selectBtDeviceBtn.setOnClickListener { view ->
             requestBtPermissions()
             if (btPermissionsGranted) {
                 view.findNavController().navigate(R.id.action_navigation_home_to_navigation_bt_device_list)
+            }
+        }
+
+        val syncBtn = binding.syncBtn
+        syncBtn.setOnClickListener { _ ->
+            try {
+                val btConnection = activityPipe!!.getBtConnection()
+                btConnection!!.enqueueJob(this@HomeFragment, "sync")
+            } catch (e: NullPointerException) {
+                Toast.makeText(requireContext(), R.string.bt_no_remote_connection, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val lockBtn = binding.lockBtn
+        lockBtn.setOnClickListener { _ ->
+            try {
+                val btConnection = activityPipe!!.getBtConnection()
+                btConnection!!.enqueueJob(this@HomeFragment, "lock")
+            } catch (e: NullPointerException) {
+                Toast.makeText(requireContext(), R.string.bt_no_remote_connection, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -94,8 +127,15 @@ class HomeFragment : Fragment() {
         }
     }
 
+    fun setLockBtn(icon: Int, title: Int, desc: Int) {
+        lockBtnIcon = icon
+        lockBtnTitle = title
+        lockBtnDesc = desc
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        activityPipe = null
     }
 }
