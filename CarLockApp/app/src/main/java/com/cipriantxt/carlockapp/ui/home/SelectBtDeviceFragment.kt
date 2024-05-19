@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.cipriantxt.carlockapp.ActivityPipe
 import com.cipriantxt.carlockapp.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -64,8 +65,8 @@ class SelectBtDeviceFragment: Fragment() {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
         val selectBtDeviceList = view.findViewById<ListView>(R.id.select_bt_device_list)
         selectBtDeviceList.adapter = adapter
-        selectBtDeviceList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            activityPipe!!.exchange(pairedDevices[position].address)
+        selectBtDeviceList.onItemClickListener = AdapterView.OnItemClickListener { _, _, index, _ ->
+            activityPipe!!.connectTo(pairedDevices[index])
             requireActivity().supportFragmentManager.popBackStack()
         }
     }
