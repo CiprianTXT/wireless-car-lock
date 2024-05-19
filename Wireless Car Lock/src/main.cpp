@@ -119,11 +119,17 @@ void commandParser() {
 
     // Set contact info
     if (command.startsWith("setInfo")) {
-        short int colonPos = command.indexOf(':');
-        short int commaPos = command.indexOf(',');
-        contactName = command.substring(colonPos + 1, commaPos);
-        contactNumber = command.substring(commaPos + 1);
-        updateContact = true;
+        if (!command.equals("setInfo:*,*")) {
+            short int colonPos = command.indexOf(':');
+            short int commaPos = command.indexOf(',');
+            if (!command.substring(colonPos + 1, commaPos).equals("*")) {
+                contactName = command.substring(colonPos + 1, commaPos);
+            }
+            if (!command.substring(commaPos + 1).equals("*")) {
+                contactNumber = command.substring(commaPos + 1);
+            }
+            updateContact = true;
+        }
         commandSuccessful = true;
     }
 
