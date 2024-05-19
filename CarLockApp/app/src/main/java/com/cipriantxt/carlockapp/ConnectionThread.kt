@@ -10,7 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
-import androidx.navigation.navOptions
 import com.cipriantxt.carlockapp.ui.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -46,13 +45,26 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
             }
             try {
                 socket.connect()
+                activity.runOnUiThread {
+                    Toast.makeText(
+                        activity,
+                        activity.getString(R.string.bt_connected_to_remote) + socket.remoteDevice.name,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             } catch (e: IOException) {
                 activity.runOnUiThread {
-                    Toast.makeText(activity, R.string.bt_connection_error, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        activity,
+                        activity.getString(R.string.bt_connection_error) + socket.remoteDevice.name,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    shutdown()
                 }
-            }
-            activity.runOnUiThread {
-                jobRunningStatus.hide()
+            } finally {
+                activity.runOnUiThread {
+                    jobRunningStatus.hide()
+                }
             }
             while (!shutdown) {
                 if (jobQueue.isEmpty()) {
@@ -181,6 +193,7 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
             lock.notifyAll()
         } else {
             lockState = "Unknown"
+            shutdown()
             updateHomeLockBtnUi(fragment, lockState)
             throw NullPointerException()
         }
