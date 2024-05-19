@@ -1,8 +1,11 @@
 <resources>
+    <!-- MainActivity related string declarations -->
     <string name="app_name">Car Lock App</string>
     <string name="title_home">Home</string>
     <string name="title_display">Display</string>
     <string name="title_settings">Settings</string>
+
+    <!-- Home related string declarations -->
     <string name="select_bt_device_title">Connect</string>
     <string name="select_bt_device_desc">Select a paired Bluetooth device to connect to and then tap on the floating button to synchronize the settings</string>
     <string name="bt_list_error">Your device doesn\'t support Bluetooth</string>
@@ -16,13 +19,19 @@
     <string name="bt_rationale_ack">OK</string>
     <string name="bt_list_title">Paired Bluetooth devices</string>
     <string name="bt_list_refresh">Refresh the list of paired devices</string>
+    <string name="bt_no_remote_connection">Connection to module not established</string>
+    <string name="bt_connection_error">Can\'t connect to selected device</string>
+    <string name="bt_socket_error">Connection closed by remote</string>
+    <string name="bt_command_error">Unexpected error occurred. Please try again</string>
     <string name="sync_btn_desc">Synchronize settings from device</string>
     <string name="unknown_lock_state_title">Unknown lock state</string>
     <string name="unknown_lock_state_desc">Synchronize with the Bluetooth device to get the lock state</string>
     <string name="locked_title">Locked</string>
-    <string name="locked_desc">Unlocks the car doors</string>
+    <string name="locked_desc">Tap again on this button to unlock the car doors</string>
     <string name="unlocked_title">Unlocked</string>
-    <string name="unlocked_desc">Locks the car doors</string>
+    <string name="unlocked_desc">Tap again on this button to lock the car doors</string>
+
+    <!-- Display related string declarations -->
     <string name="contact_title">Contact information</string>
     <string name="contact_desc">Fill in your name and phone number that you want to display</string>
     <string name="contact_name">Name</string>
@@ -31,6 +40,8 @@
     <string name="contact_phone_number_digits">1234567890</string>
     <string name="contact_show">Show information on display</string>
     <string name="contact_save_btn">Save</string>
+
+    <!-- Settings related string declarations -->
     <string name="module_title">Module information</string>
     <string name="module_desc">Here you can modify the module credentials, just fill in the fields you want to change and leave blank those you don\'t want to modify</string>
     <string name="module_name">Name</string>
