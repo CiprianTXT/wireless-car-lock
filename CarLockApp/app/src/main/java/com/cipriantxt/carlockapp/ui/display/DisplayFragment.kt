@@ -4,50 +4,64 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import com.cipriantxt.carlockapp.ActivityPipe
+import com.cipriantxt.carlockapp.R
 import com.cipriantxt.carlockapp.databinding.FragmentDisplayBinding
 
 class DisplayFragment : Fragment() {
-
     private var _binding: FragmentDisplayBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    private var activityPipe: ActivityPipe? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val displayViewModel =
-            ViewModelProvider(this).get(DisplayViewModel::class.java)
-
         _binding = FragmentDisplayBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        For this component:
-//        <TextView
-//        android:id="@+id/text_display"
-//        android:layout_width="match_parent"
-//        android:layout_height="wrap_content"
-//        android:layout_marginStart="8dp"
-//        android:layout_marginTop="8dp"
-//        android:layout_marginEnd="8dp"
-//        android:textAlignment="center"
-//        android:textSize="20sp"
-//        app:layout_constraintBottom_toBottomOf="parent"
-//        app:layout_constraintEnd_toEndOf="parent"
-//        app:layout_constraintStart_toStartOf="parent"
-//        app:layout_constraintTop_toTopOf="parent" />
+        activityPipe = requireActivity() as ActivityPipe
+        val contactSaveBtn = binding.contactSaveBtn
+        contactSaveBtn.setOnClickListener { view ->
+            val contactName = if (binding.contactNameField.text!!.isNotEmpty()) {
+                binding.contactNameField.text
+            } else {
+                "*"
+            }
+            val contactPhoneNumber = if (binding.contactPhoneNumberField.text!!.isNotEmpty()) {
+                binding.contactPhoneNumberField.text
+            } else {
+                "*"
+            }
+            val contactCommand = "setInfo:$contactName,$contactPhoneNumber"
 
-//        Modifying content:
-//        val textView: TextView = binding.textDisplay
-//        displayViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
+            val showContact = binding.contactShowSwitch.isChecked
+            val displayCommand = if (showContact) {
+                "hideInfo:0"
+            } else {
+                "hideInfo:1"
+            }
+
+            try {
+                val btConnection = activityPipe!!.getBtConnection()
+                btConnection!!.enqueueJob(this@DisplayFragment, contactCommand)
+                btConnection.enqueueJob(this@DisplayFragment, displayCommand)
+            } catch (e: Exception) {
+                when (e) {
+                    is NullPointerException, is ClassCastException -> {
+                        Toast.makeText(requireContext(), R.string.bt_no_remote_connection, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } finally {
+                view.findNavController().navigate(R.id.navigation_home)
+            }
+        }
+
         return root
     }
 
