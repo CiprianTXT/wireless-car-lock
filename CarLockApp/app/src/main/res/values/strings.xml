@@ -38,9 +38,10 @@
     <string name="contact_name">Name</string>
     <string name="contact_name_digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="contact_phone_number">Phone number</string>
-    <string name="contact_phone_number_digits">1234567890</string>
+    <string name="contact_phone_number_digits">1234567890 -+()</string>
     <string name="contact_show">Show information on display</string>
     <string name="contact_save_btn">Save</string>
+    <string name="contact_saved">Contact updated successfully</string>
 
     <!-- Settings related string declarations -->
     <string name="module_title">Module information</string>
