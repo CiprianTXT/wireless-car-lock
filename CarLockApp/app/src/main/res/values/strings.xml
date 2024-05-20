@@ -20,9 +20,9 @@
     <string name="bt_list_title">Paired Bluetooth devices</string>
     <string name="bt_list_refresh">Refresh the list of paired devices</string>
     <string name="bt_connected_to_remote">Successfully connected to\ </string>
-    <string name="bt_no_remote_connection">Connection to module not established</string>
+    <string name="bt_no_remote_connection">Connection to remote device not established</string>
     <string name="bt_connection_error">Can\'t connect to\ </string>
-    <string name="bt_socket_error">Connection closed by remote</string>
+    <string name="bt_socket_error">Connection closed by remote device</string>
     <string name="bt_command_error">Unexpected error occurred. Please try again</string>
     <string name="sync_btn_desc">Synchronize settings from device</string>
     <string name="unknown_lock_state_title">Unknown lock state</string>
@@ -44,11 +44,17 @@
     <string name="contact_saved">Contact updated successfully</string>
 
     <!-- Settings related string declarations -->
-    <string name="module_title">Module information</string>
-    <string name="module_desc">Here you can modify the module credentials, just fill in the fields you want to change and leave blank those you don\'t want to modify</string>
-    <string name="module_name">Name</string>
-    <string name="module_name_digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 -_.()</string>
-    <string name="module_pin">PIN</string>
-    <string name="module_pin_digits">1234567890</string>
-    <string name="module_save_btn">Save</string>
+    <string name="device_title">Device information</string>
+    <string name="device_desc">Here you can modify the device credentials, just fill in the fields you want to change and leave blank those you don\'t want to modify</string>
+    <string name="device_name">Name</string>
+    <string name="device_name_digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 -_.()</string>
+    <string name="device_pin">PIN</string>
+    <string name="device_pin_digits">1234567890</string>
+    <string name="device_save_btn">Save</string>
+    <string name="device_empty_fields">Please fill in at least one field</string>
+    <string name="device_save_dialog_title">Apply settings?</string>
+    <string name="device_save_dialog_desc">After applying the settings, the device will restart and you\'ll need to reconnect.</string>
+    <string name="device_save_dialog_negative">No</string>
+    <string name="device_save_dialog_positive">Yes</string>
+    <string name="device_cred_saved">Device settings applied successfully</string>
 </resources>
