@@ -121,10 +121,10 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
         if (this::lockState.isInitialized) {
             val status = issueCommandToSocket("lock").trim()
             if (status == "success") {
-                lockState = if (lockState == "Unlocked") {
-                    "Locked"
+                lockState = if (lockState == "unlocked") {
+                    "locked"
                 } else {
-                    "Unlocked"
+                    "unlocked"
                 }
                 updateHomeLockBtnUi(fragment, lockState)
             } else {
@@ -190,13 +190,13 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
         var lockBtnTitle by Delegates.notNull<Int>()
         var lockBtnDesc by Delegates.notNull<Int>()
         when (lockState) {
-            "Locked" -> {
+            "locked" -> {
                 lockBtnIcon = R.drawable.ic_locked_24dp
                 lockBtnTitle = R.string.locked_title
                 lockBtnDesc = R.string.locked_desc
             }
 
-            "Unlocked" -> {
+            "unlocked" -> {
                 lockBtnIcon = R.drawable.ic_unlocked_24dp
                 lockBtnTitle = R.string.unlocked_title
                 lockBtnDesc = R.string.unlocked_desc
@@ -226,7 +226,7 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
             jobQueue.add(Pair(fragment, command))
             lock.notifyAll()
         } else {
-            lockState = "Unknown"
+            lockState = "unknown"
             shutdown()
             updateHomeLockBtnUi(fragment, lockState)
             throw NullPointerException()
