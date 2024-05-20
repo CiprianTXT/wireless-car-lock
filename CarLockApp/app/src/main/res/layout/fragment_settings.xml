@@ -7,7 +7,7 @@
     tools:context=".ui.settings.SettingsFragment">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/set_module_card"
+        android:id="@+id/set_device_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
@@ -25,7 +25,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:contentDescription="@string/module_desc"
+                android:contentDescription="@string/device_desc"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/back_hc05_800dp" />
 
@@ -38,7 +38,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/module_title"
+                    android:text="@string/device_title"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textSize="25sp" />
 
@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="@string/module_desc"
+                    android:text="@string/device_desc"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="15sp" />
@@ -60,50 +60,50 @@
                 android:padding="16dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/module_name_field"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/module_name"
+                    android:hint="@string/device_name"
                     app:counterEnabled="true"
                     app:counterMaxLength="32"
-                    app:startIconContentDescription="@string/module_name"
+                    app:startIconContentDescription="@string/device_name"
                     app:startIconDrawable="@drawable/ic_bluetooth_24dp">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/device_name_field"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:digits="@string/module_name_digits" />
+                        android:digits="@string/device_name_digits" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/module_pin_field"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/module_pin"
+                    android:hint="@string/device_pin"
                     app:counterEnabled="true"
                     app:counterMaxLength="4"
-                    app:startIconContentDescription="@string/module_pin"
+                    app:startIconContentDescription="@string/device_pin"
                     app:startIconDrawable="@drawable/ic_password_24dp">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/device_pin_field"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:inputType="numberPassword"
-                        android:digits="@string/module_pin_digits" />
+                        android:digits="@string/device_pin_digits" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/module_save_btn"
+                    android:id="@+id/device_save_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center"
-                    android:text="@string/module_save_btn" />
+                    android:text="@string/device_save_btn" />
 
             </LinearLayout>
 
