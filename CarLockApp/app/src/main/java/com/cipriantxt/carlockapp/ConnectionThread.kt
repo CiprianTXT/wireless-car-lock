@@ -101,6 +101,8 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
             command == "lock" -> lockCommand(fragment)
             command.startsWith("setInfo") -> setInfoCommand(command)
             command.startsWith("hideInfo") -> hideInfoCommand(command)
+            command.startsWith("setBtCred") -> setBtCredCommand(command)
+            else -> printUnexpectedError()
         }
     }
 
@@ -116,16 +118,20 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
     }
 
     private fun lockCommand(fragment: Fragment) {
-        val status = issueCommandToSocket("lock").trim()
-        if (status == "success") {
-            lockState = if (lockState == "Unlocked") {
-                "Locked"
+        if (this::lockState.isInitialized) {
+            val status = issueCommandToSocket("lock").trim()
+            if (status == "success") {
+                lockState = if (lockState == "Unlocked") {
+                    "Locked"
+                } else {
+                    "Unlocked"
+                }
+                updateHomeLockBtnUi(fragment, lockState)
             } else {
-                "Unlocked"
+                printUnexpectedError()
             }
-            updateHomeLockBtnUi(fragment, lockState)
         } else {
-            printUnexpectedError()
+            syncCommand(fragment)
         }
     }
 
@@ -144,6 +150,14 @@ class ConnectionThread(private val activity: MainActivity, device: BluetoothDevi
             }
         } else {
             printUnexpectedError()
+        }
+    }
+
+    private fun setBtCredCommand(command: String) {
+        bluetoothSocket!!.outputStream.write(command.toByteArray())
+        shutdown()
+        activity.runOnUiThread {
+            Toast.makeText(activity, R.string.device_cred_saved, Toast.LENGTH_SHORT).show()
         }
     }
 
