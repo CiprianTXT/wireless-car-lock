@@ -11,6 +11,7 @@
 #define TX_PIN          8
 
 // Defining AT commands
+#define AT_RESET        "AT+RESET"
 #define AT_NAME         "AT+NAME"
 #define AT_PSWD         "AT+PSWD"
 
@@ -19,8 +20,6 @@ bool locked = false;
 unsigned long prevTimeLockLED = 0;
 bool hideContact = false;
 bool updateContact = false;
-bool restartBt = false;
-unsigned long prevTimeRestartBt = 0;
 String contactName;
 String contactNumber;
 
@@ -28,7 +27,6 @@ SoftwareSerial BTSerial(RX_PIN, TX_PIN);
 LCD_I2C Display(0x27, 16, 2);
 
 void commandParser();
-void configureBluetooth();
 void serialFlush();
 
 void setup() {
@@ -81,20 +79,6 @@ void loop() {
         Display.print(contactNumber);
         updateContact = false;
     }
-
-    // Restart bluetooth module
-    unsigned long restartBtInterval = millis() - prevTimeRestartBt;
-    if (restartBt) {
-        if (restartBtInterval >= 5000) {
-            digitalWrite(BT_POWER_PIN, LOW);
-            if (restartBtInterval > 8000) {
-                digitalWrite(BT_POWER_PIN, HIGH);
-                restartBt = false;
-            }
-        }
-    }
-
-    // configureBluetooth();
 }
 
 void commandParser() {
@@ -105,7 +89,7 @@ void commandParser() {
 
     // Sync lock state with phone app
     if (command.equals("sync")) {
-        BTSerial.println(locked ? "Locked" : "Unlocked");
+        BTSerial.println(locked ? "locked" : "unlocked");
         commandSuccessful = true;
     }
 
@@ -176,32 +160,16 @@ void commandParser() {
             delay(100);
             BTSerial.println(atNameCommand);
             BTSerial.println(atPswdCommand);
+            BTSerial.println(AT_RESET);
             digitalWrite(BT_POWER_PIN, LOW);
             digitalWrite(BT_AT_PIN, LOW);
             digitalWrite(BT_POWER_PIN, HIGH);
             serialFlush();
-            prevTimeRestartBt = millis();
-            restartBt = true;
         }
     }
 
     if (!isAtCommand) {
         BTSerial.println(commandSuccessful ? "success" : "fail");
-    }
-}
-
-void configureBluetooth() {
-    digitalWrite(BT_POWER_PIN, LOW);
-    digitalWrite(BT_AT_PIN, HIGH);
-    digitalWrite(BT_POWER_PIN, HIGH);
-    while (1) {
-        if (Serial.available()) {
-            BTSerial.write(Serial.read());
-        }
-
-        if (BTSerial.available()) {
-            Serial.write(BTSerial.read());
-        }
     }
 }
 
