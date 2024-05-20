@@ -49,8 +49,10 @@ class DisplayFragment : Fragment() {
 
             try {
                 val btConnection = activityPipe!!.getBtConnection()
-                btConnection!!.enqueueJob(this@DisplayFragment, contactCommand)
-                btConnection.enqueueJob(this@DisplayFragment, displayCommand)
+                if (contactCommand != "setInfo:*,*") {
+                    btConnection!!.enqueueJob(this@DisplayFragment, contactCommand)
+                }
+                btConnection!!.enqueueJob(this@DisplayFragment, displayCommand)
             } catch (e: Exception) {
                 when (e) {
                     is NullPointerException, is ClassCastException -> {
