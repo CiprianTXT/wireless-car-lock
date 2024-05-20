@@ -19,6 +19,8 @@ bool locked = false;
 unsigned long prevTimeLockLED = 0;
 bool hideContact = false;
 bool updateContact = false;
+bool restartBt = false;
+unsigned long prevTimeRestartBt = 0;
 String contactName;
 String contactNumber;
 
@@ -80,12 +82,19 @@ void loop() {
         updateContact = false;
     }
 
-    // BTSerial.println(Serial.readString());
-    // Serial.println(locked ? "Locked" : "Unlocked");
+    // Restart bluetooth module
+    unsigned long restartBtInterval = millis() - prevTimeLockLED;
+    if (restartBt) {
+        if (restartBtInterval >= 100) {
+            // TODO
+        }
+    }
+
     // configureBluetooth();
 }
 
 void commandParser() {
+    bool isAtCommand = false;
     bool commandSuccessful = false;
     String command = BTSerial.readString();
     command.trim();
@@ -133,47 +142,49 @@ void commandParser() {
         commandSuccessful = true;
     }
 
-    // Set name for bluetooth module
-    if (command.startsWith("setBtName")) {
-        short int colonPos = command.indexOf(':');
-        String moduleName = command.substring(colonPos + 1);
-        String atCommand = AT_NAME;
-        String atParams = "=";
-        atParams.concat(moduleName);
-        atCommand.concat(atParams);
-        digitalWrite(BT_POWER_PIN, LOW);
-        digitalWrite(BT_AT_PIN, HIGH);
-        digitalWrite(BT_POWER_PIN, HIGH);
-        delay(1);
-        BTSerial.println(atCommand);
-        digitalWrite(BT_POWER_PIN, LOW);
-        digitalWrite(BT_AT_PIN, LOW);
-        digitalWrite(BT_POWER_PIN, HIGH);
-        serialFlush();
-        commandSuccessful = true;
+    // Set credentials for bluetooth module
+    if (command.startsWith("setBtCred")) {
+        isAtCommand = true;
+        if (!command.equals("setBtCred:*,*")) {
+            short int colonPos = command.indexOf(':');
+            short int commaPos = command.indexOf(',');
+            String atNameCommand = AT_NAME;
+            if (!command.substring(colonPos + 1, commaPos).equals("*")) {
+                String moduleName = command.substring(colonPos + 1, commaPos);
+                String atParams = "=";
+                atParams.concat(moduleName);
+                atNameCommand.concat(atParams);
+            } else {
+                atNameCommand.concat('?');
+            }
+            String atPswdCommand = AT_PSWD;
+            if (!command.substring(commaPos + 1).equals("*")) {
+                String modulePswd = command.substring(commaPos + 1);
+                String atParams = "=";
+                atParams.concat(modulePswd);
+                atPswdCommand.concat(atParams);
+            } else {
+                atPswdCommand.concat('?');
+            }
+            Serial.println(atNameCommand);
+            Serial.println(atPswdCommand);
+            digitalWrite(BT_POWER_PIN, LOW);
+            digitalWrite(BT_AT_PIN, HIGH);
+            digitalWrite(BT_POWER_PIN, HIGH);
+            delay(100);
+            BTSerial.println(atNameCommand);
+            BTSerial.println(atPswdCommand);
+            digitalWrite(BT_POWER_PIN, LOW);
+            digitalWrite(BT_AT_PIN, LOW);
+            digitalWrite(BT_POWER_PIN, HIGH);
+            serialFlush();
+            restartBt = true;
+        }
     }
 
-    // Set passkey for bluetooth module
-    if (command.startsWith("setBtPswd")) {
-        short int colonPos = command.indexOf(':');
-        String modulePswd = command.substring(colonPos + 1);
-        String atCommand = AT_PSWD;
-        String atParams = "=";
-        atParams.concat(modulePswd);
-        atCommand.concat(atParams);
-        digitalWrite(BT_POWER_PIN, LOW);
-        digitalWrite(BT_AT_PIN, HIGH);
-        digitalWrite(BT_POWER_PIN, HIGH);
-        delay(1);
-        BTSerial.println(atCommand);
-        digitalWrite(BT_POWER_PIN, LOW);
-        digitalWrite(BT_AT_PIN, LOW);
-        digitalWrite(BT_POWER_PIN, HIGH);
-        serialFlush();
-        commandSuccessful = true;
+    if (!isAtCommand) {
+        BTSerial.println(commandSuccessful ? "success" : "fail");
     }
-
-    BTSerial.println(commandSuccessful ? "success" : "fail");
 }
 
 void configureBluetooth() {
