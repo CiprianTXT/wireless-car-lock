@@ -83,10 +83,14 @@ void loop() {
     }
 
     // Restart bluetooth module
-    unsigned long restartBtInterval = millis() - prevTimeLockLED;
+    unsigned long restartBtInterval = millis() - prevTimeRestartBt;
     if (restartBt) {
-        if (restartBtInterval >= 100) {
-            // TODO
+        if (restartBtInterval >= 5000) {
+            digitalWrite(BT_POWER_PIN, LOW);
+            if (restartBtInterval > 8000) {
+                digitalWrite(BT_POWER_PIN, HIGH);
+                restartBt = false;
+            }
         }
     }
 
@@ -166,8 +170,6 @@ void commandParser() {
             } else {
                 atPswdCommand.concat('?');
             }
-            Serial.println(atNameCommand);
-            Serial.println(atPswdCommand);
             digitalWrite(BT_POWER_PIN, LOW);
             digitalWrite(BT_AT_PIN, HIGH);
             digitalWrite(BT_POWER_PIN, HIGH);
@@ -178,6 +180,7 @@ void commandParser() {
             digitalWrite(BT_AT_PIN, LOW);
             digitalWrite(BT_POWER_PIN, HIGH);
             serialFlush();
+            prevTimeRestartBt = millis();
             restartBt = true;
         }
     }
