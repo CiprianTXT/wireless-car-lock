@@ -11,7 +11,7 @@
     <string name="bt_list_error">Your device doesn\'t support Bluetooth</string>
     <string name="bt_permission_denied_title">Feature unavailable</string>
     <string name="bt_permission_denied_desc">Bluetooth features are unavailable because this app needs permissions that were not given</string>
-    <string name="bt_permission_denied_settings">I changed my mind</string>
+    <string name="bt_permission_denied_settings">I\'ve changed my mind</string>
     <string name="bt_permission_denied_ack">OK</string>
     <string name="bt_rationale_title">Bluetooth permissions</string>
     <string name="bt_rationale_desc">Bluetooth permissions are needed for connecting your phone to the device</string>
