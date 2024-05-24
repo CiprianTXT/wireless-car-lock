@@ -9,6 +9,7 @@
 #define BT_POWER_PIN    6
 #define RX_PIN          7
 #define TX_PIN          8
+#define CAR_LOCK_PIN    13
 
 // Defining AT commands
 #define AT_RESET        "AT+RESET"
@@ -33,6 +34,10 @@ void setup() {
     // Starting display
     Display.begin();
     Display.backlight();
+
+    // Starting car lock circuit
+    pinMode(CAR_LOCK_PIN, OUTPUT);
+    digitalWrite(CAR_LOCK_PIN, HIGH);
 
     // Starting lock LED and buzzer
     pinMode(BUZZER_PIN, OUTPUT);
@@ -97,6 +102,9 @@ void commandParser() {
     if (command.equals("lock")) {
         locked = !locked;
         tone(BUZZER_PIN, 500, 500);
+        digitalWrite(CAR_LOCK_PIN, LOW);
+        delay(150);
+        digitalWrite(CAR_LOCK_PIN, HIGH);
         commandSuccessful = true;
     }
 
