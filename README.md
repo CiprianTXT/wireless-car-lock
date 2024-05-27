@@ -163,7 +163,7 @@ Pentru montarea efectivă a sistemului wireless pe autoturism, am parcurs următ
 
 <img src="https://ocw.cs.pub.ro/courses/_media/pm/prj2024/rvirtan/wireless-lock/rezultat.jpg" class="align-right" width="384" />
 
-<iframe width="288" height="512" src="https://www.youtube.com/embed/fjLBnKy166g?si=VYyjpPgA3-yAeKNr" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<a href="https://www.youtube.com/watch?v=fjLBnKy166g">DEMO Proiect</a>
 
 ## Concluzii
 
